@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.sam_chordas.android.stockhawk.R;
@@ -42,6 +43,9 @@ public class FragmentLineGraph extends Fragment {
         Intent intent = getActivity().getIntent();
         symbol = intent.getStringExtra("symbol");
         Log.v("Symbol Received",symbol);
+
+
+
     }
 
     @Override
@@ -53,6 +57,7 @@ public class FragmentLineGraph extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
         setData(20,(float)5.0);
 
     }
@@ -60,6 +65,7 @@ public class FragmentLineGraph extends Fragment {
     public void setData(int count, float range) {
         RetrofitCall rc=new RetrofitCall(getActivity(),this);
         rc.getHistory("20",symbol);
+        rc.getStats("20",symbol);
     }
 
     @Override

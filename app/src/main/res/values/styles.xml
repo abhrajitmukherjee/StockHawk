@@ -3,8 +3,8 @@
   <!-- Base application theme. -->
   <style name="AppTheme"
       parent="Theme.AppCompat.Light.DarkActionBar">
-      <item name="colorPrimary">@color/material_blue_500</item>
-      <item name="colorPrimaryDark">@color/material_blue_700</item>
+      <item name="colorPrimary">@color/color_primary_light</item>
+      <item name="colorPrimaryDark">@color/color_primary_dark</item>
     <!-- Customize your theme here. -->
   </style>
 
@@ -19,6 +19,23 @@
   <style name="StockSymbolTextStyle">
     <item name="android:textSize">25sp</item>
     <item name="android:textAllCaps">true</item>
+  </style>
+
+  <style name="stats_bold">
+    <item name="android:textStyle">bold</item>
+    <item name="android:textSize">18sp</item>
+    <item name="android:textColor">@android:color/black</item>
+      <item name="android:layout_width">match_parent</item>
+      <item name="android:layout_height">wrap_content</item>
+
+  </style>
+
+  <style name="stats_legend">
+    <item name="android:textSize">14sp</item>
+    <item name="android:textColor">@android:color/darker_gray</item>
+      <item name="android:layout_width">match_parent</item>
+      <item name="android:layout_height">wrap_content</item>
+      <item name="android:paddingBottom">8dp</item>
   </style>
 
 </resources>
