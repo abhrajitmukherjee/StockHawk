@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,7 +58,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mContext = this;
-    ConnectivityManager cm =
+   final ConnectivityManager cm =
         (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
     NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -100,6 +99,9 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     fab.attachToRecyclerView(recyclerView);
     fab.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
+          NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+          isConnected = activeNetwork != null &&
+                  activeNetwork.isConnectedOrConnecting();
         if (isConnected){
           new MaterialDialog.Builder(mContext).title(R.string.symbol_search)
               .content(R.string.content_test)
@@ -140,7 +142,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
     mTitle = getTitle();
     if (isConnected){
-      long period = 3600L;
+      long period = 30L;
       long flex = 10L;
       String periodicTag = "periodic";
 
@@ -157,6 +159,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
       // Schedule task with tag "periodic." This ensure that only the stocks present in the DB
       // are updated.
       GcmNetworkManager.getInstance(this).schedule(periodicTask);
+
     }
   }
 
