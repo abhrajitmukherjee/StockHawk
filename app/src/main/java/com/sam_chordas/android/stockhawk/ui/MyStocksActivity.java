@@ -88,7 +88,8 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 Intent intent = new Intent(mContext, DetailActivity.class);
                   Cursor cr=mCursorAdapter.getCursor();
                   cr.moveToPosition(position);
-                intent.putExtra("symbol", cr.getString(cr.getColumnIndex("symbol")));
+                intent.putExtra("symbol", cr.getString(cr.getColumnIndex(QuoteColumns.SYMBOL)));
+                  intent.putExtra("percent", cr.getString(cr.getColumnIndex(QuoteColumns.PERCENT_CHANGE)));
                 startActivity(intent);
               }
             }));
@@ -115,7 +116,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                       new String[] { input.toString() }, null);
                   if (c.getCount() != 0) {
                     Toast toast =
-                        Toast.makeText(MyStocksActivity.this, "This stock is already saved!",
+                        Toast.makeText(MyStocksActivity.this, getString(R.string.msg_stock_saved),
                             Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER, Gravity.CENTER, 0);
                     toast.show();

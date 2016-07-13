@@ -3,13 +3,13 @@ package com.sam_chordas.android.stockhawk.widget;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+import com.sam_chordas.android.stockhawk.ui.DetailActivity;
 
 import java.util.ArrayList;
 
@@ -61,11 +61,17 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
         view.setTextViewText(R.id.bid_price,mCollection.get(position).get(1));
         view.setTextColor(R.id.bid_price,mContext.getResources().getColor(android.R.color.black));
         view.setTextViewText(R.id.change,mCollection.get(position).get(2));
-//        view.setInt(R.id.change, "setBackground",
-//                R.drawable.percent_change_pill_green);
+        if (mCollection.get(position).get(2).charAt(0)=='-'){
+            view.setTextColor(R.id.change,mContext.getResources().getColor(R.color.graph_red));
+        }else{
+            view.setTextColor(R.id.change,mContext.getResources().getColor(R.color.graph_green));
+        }
 
+        Intent intent = new Intent(mContext, DetailActivity.class);
+        intent.putExtra("symbol",mCollection.get(position).get(0));
+        intent.putExtra("percent",mCollection.get(position).get(2));
 
-        //view.setTextViewText(android.R.id.text1, mCollection.get(position));
+        view.setOnClickFillInIntent(R.id.list_item_quote, intent);
         return view;
     }
 
@@ -94,17 +100,16 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
 
         Cursor c = mContext.getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,null,
                 QuoteColumns.ISCURRENT+"='1'",null,null);
-        Log.v("Cursor Widget",Integer.toString(c.getCount()));
-       c.moveToFirst();
+        c.moveToFirst();
         for (int i = 0; i < c.getCount(); i++) {
             ArrayList<String> lst=new ArrayList<>();
             lst.add(c.getString(c.getColumnIndex(QuoteColumns.SYMBOL)));
             lst.add(c.getString(c.getColumnIndex(QuoteColumns.BIDPRICE)));
             lst.add(c.getString(c.getColumnIndex(QuoteColumns.PERCENT_CHANGE)));
+            lst.add(c.getString(c.getColumnIndex(QuoteColumns.ISUP)));
            mCollection.add(lst);
             c.moveToNext();
         }
-        Log.v("Cursor Widget",c.getColumnName(0));
         c.close();
     }
 

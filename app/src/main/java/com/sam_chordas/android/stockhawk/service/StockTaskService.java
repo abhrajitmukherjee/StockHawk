@@ -53,17 +53,17 @@ public class StockTaskService extends GcmTaskService {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-        Response response=null;
-        try{
-             response = client.newCall(request).execute();
-        }catch (java.net.SocketTimeoutException E){
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+        } catch (java.net.SocketTimeoutException E) {
             CharSequence text = getString(R.string.err_socket_timeout);
             int duration = Toast.LENGTH_SHORT;
 
             Toast toast = Toast.makeText(mContext, text, duration);
             toast.show();
             return null;
-        }catch (java.net.UnknownHostException E){
+        } catch (java.net.UnknownHostException E) {
             CharSequence text = getString(R.string.err_socket_timeout);
             int duration = Toast.LENGTH_SHORT;
 
@@ -74,13 +74,11 @@ public class StockTaskService extends GcmTaskService {
         }
 
 
-
         return response.body().string();
     }
 
     @Override
     public int onRunTask(TaskParams params) {
-        Log.v("GCM:","GCM RUNS-----------------");
         Cursor initQueryCursor;
         if (mContext == null) {
             mContext = this;
@@ -145,10 +143,8 @@ public class StockTaskService extends GcmTaskService {
 
         if (urlStringBuilder != null) {
             urlString = urlStringBuilder.toString();
-            Log.v("Test URL", urlString);
             try {
                 getResponse = fetchData(urlString);
-                Log.v("Response", getResponse);
                 result = GcmNetworkManager.RESULT_SUCCESS;
                 try {
                     ContentValues contentValues = new ContentValues();
@@ -167,7 +163,7 @@ public class StockTaskService extends GcmTaskService {
                     mContext.getContentResolver().applyBatch(QuoteProvider.AUTHORITY,
                             Utils.quoteJsonToContentVals(getResponse));
                 } catch (RemoteException | OperationApplicationException e) {
-                    Log.e(LOG_TAG, "Error applying batch insert", e);
+                    Log.e(LOG_TAG, getString(R.string.error_batch_insert), e);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -177,10 +173,10 @@ public class StockTaskService extends GcmTaskService {
         Intent intent = new Intent(mContext.getApplicationContext(), StockWidget.class);
         intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
         int ids[] = AppWidgetManager.getInstance(mContext.getApplicationContext()).getAppWidgetIds(new ComponentName(mContext.getApplicationContext(), StockWidget.class));
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
         mContext.sendBroadcast(intent);
 
-    return result;
+        return result;
     }
 
 }

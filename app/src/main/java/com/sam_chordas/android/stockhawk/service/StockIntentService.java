@@ -4,10 +4,10 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.gcm.TaskParams;
+import com.sam_chordas.android.stockhawk.R;
 
 /**
  * Created by sam_chordas on 10/1/15.
@@ -25,7 +25,7 @@ public class StockIntentService extends IntentService {
   }
 
   @Override protected void onHandleIntent(Intent intent) {
-    Log.d(StockIntentService.class.getSimpleName(), "Stock Intent Service");
+    //Log.d(StockIntentService.class.getSimpleName(), "Stock Intent Service");
     StockTaskService stockTaskService = new StockTaskService(this);
     Bundle args = new Bundle();
     if (intent.getStringExtra("tag").equals("add")){
@@ -38,9 +38,8 @@ public class StockIntentService extends IntentService {
         mMainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
-                CharSequence text = "Invalid Symbol";
+                CharSequence text = getString(R.string.text_invalid_symbol);
                 int duration = Toast.LENGTH_SHORT;
-                Log.v("test me", "yes symbol is wrong");
                 Toast toast = Toast.makeText(getApplicationContext(), text, duration);
                 toast.show();
             }

@@ -1,13 +1,11 @@
 <resources>
     <string name="app_name">Stock Hawk</string>
 
-    <string name="action_example">Example action</string>
-
     <string name="action_settings">Settings</string>
     <string name="action_change_units">Change Units</string>
     <string name="symbol_search">Symbol Search</string>
     <string name="content_test">Search for a Stock Symbol</string>
-    <string name="input_hint">FB</string>
+    <string name="input_hint" translatable="false">FB</string>
     <string name="input_prefill"></string>
     <string name="network_toast">Uh-oh! This app requires an internet connection</string>
 
@@ -15,4 +13,12 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="err_socket_timeout">Connection Timeout</string>
+    <string name="msg_stock_saved">This stock is already saved!</string>
+    <string name="msg_data_fetch">Unable to Fetch data!</string>
+    <string name="error_batch_insert">Error applying batch insert</string>
+    <string name="text_NA">N/A</string>
+    <string name="button_dec">Add New Stock</string>
+    <string name="text_invalid_symbol">Invalid Symbol</string>
+    <string name="last_open">Last Open</string>
+    <string name="chart_desc">Chart showing five year history of the stock</string>
 </resources>

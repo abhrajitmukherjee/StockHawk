@@ -1,6 +1,7 @@
 package com.sam_chordas.android.stockhawk.widget;
 
 import android.annotation.TargetApi;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -8,10 +9,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.sam_chordas.android.stockhawk.R;
+import com.sam_chordas.android.stockhawk.ui.DetailActivity;
 
 /**
  * Implementation of App Widget functionality.
@@ -21,8 +22,7 @@ public class StockWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
-        // Construct the RemoteViews object
+
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.stock_widget);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -30,6 +30,15 @@ public class StockWidget extends AppWidgetProvider {
         } else {
             setRemoteAdapterV11(context, views);
         }
+
+        Intent configIntent = new Intent(context, DetailActivity.class);
+
+        PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+
+        views.setPendingIntentTemplate(R.id.widget_list, configPendingIntent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -41,6 +50,7 @@ public class StockWidget extends AppWidgetProvider {
 
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
+
         }
     }
 
@@ -59,10 +69,8 @@ public class StockWidget extends AppWidgetProvider {
         super.onReceive(context, intent);
 
         if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
-            Log.v("yes","I recieved");
             AppWidgetManager appWid=AppWidgetManager.getInstance(context);
             int ids[] = appWid.getAppWidgetIds(new ComponentName(context, StockWidget.class));
-            Log.v("Yes",Integer.toString(ids.length));
             appWid.notifyAppWidgetViewDataChanged(ids,R.id.widget_list);
 
         }

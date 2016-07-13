@@ -59,12 +59,11 @@ public class RetrofitCall {
         repos.enqueue(new Callback<StockStats>() {
             @Override
             public void onResponse(Call<StockStats> call, Response<StockStats> response) {
-                Log.d("Test", "onResponse - Status : " + response.code() + " " + call.request().url().toString());
+          //      Log.d("Test", "onResponse - Status : " + response.code() + " " + call.request().url().toString());
 
 
                 if (response.isSuccessful()) {
                     StockStats rv = response.body();
-                    Log.v("Response of stats---",rv.query.results.quote.symbol);
                     Quote qt=rv.query.results.quote;
                     TextView tvOpen=(TextView) mParentActivity.findViewById(R.id.text_open);
                     TextView tvVolume=(TextView) mParentActivity.findViewById(R.id.text_volume);
@@ -76,37 +75,39 @@ public class RetrofitCall {
                     TextView tvFiftyHigh=(TextView) mParentActivity.findViewById(R.id.text_52High);
                     TextView tvFiftyLow=(TextView) mParentActivity.findViewById(R.id.text_52Low);
                     TextView tvDiv=(TextView) mParentActivity.findViewById(R.id.text_div);
+                    if (tvOpen!=null){
 
-                    tvOpen.setText("$"+qt.open);
-                    tvVolume.setText(qt.volume);
-                    tvTodayHigh.setText("$"+qt.daysHigh);
-                    tvAvgVol.setText(qt.averageDailyVolume);
-                    tvTodayLow.setText("$"+qt.daysLow);
-                    tvMarket.setText("$"+qt.marketCapitalization);
-                    tvFiftyHigh.setText("$"+qt.yearHigh);
-                    if (qt.pERatio==null){
-                        tvPe.setText("N/A");
 
-                    }else{
-                        tvPe.setText(qt.pERatio);
+                        tvOpen.setText("$"+qt.open);
+                        tvVolume.setText(qt.volume);
+                        tvTodayHigh.setText("$"+qt.daysHigh);
+                        tvAvgVol.setText(qt.averageDailyVolume);
+                        tvTodayLow.setText("$"+qt.daysLow);
+                        tvMarket.setText("$"+qt.marketCapitalization);
+                        tvFiftyHigh.setText("$"+qt.yearHigh);
+                        if (qt.pERatio==null){
+                            tvPe.setText(mParentActivity.getString(R.string.text_NA));
+
+                        }else{
+                            tvPe.setText(qt.pERatio);
+                        }
+
+
+                        tvFiftyLow.setText("$"+qt.yearLow);
+                        if (qt.dividendYield == null){
+                            tvDiv.setText("0");
+                        }else
+                        {
+                            tvDiv.setText(qt.dividendYield);
+                        }
                     }
-
-
-                    tvFiftyLow.setText("$"+qt.yearLow);
-                    if (qt.dividendYield == null){
-                        tvDiv.setText("0");
-                    }else
-                    {
-                        tvDiv.setText(qt.dividendYield);
-                    }
-
 
 
                 }}
 
             @Override
             public void onFailure(Call<StockStats> call, Throwable t) {
-                Log.d("Error----", t.getMessage());
+                Log.d("Error:", t.getMessage());
             }
         });}
 
@@ -119,7 +120,7 @@ public class RetrofitCall {
 
 
 
-    public void getHistory(String id, String type) {
+    public void getHistory(final String percent, String type) {
 
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -134,7 +135,7 @@ public class RetrofitCall {
         repos.enqueue(new Callback<okhttp3.ResponseBody>() {
             @Override
             public void onResponse(Call<okhttp3.ResponseBody> call, Response<okhttp3.ResponseBody> response) {
-                Log.d("Test", "onResponse - Status : " + response.code() + " " + call.request().url().toString());
+        //        Log.d("Test", "onResponse - Status : " + response.code() + " " + call.request().url().toString());
 
 
                 if (response.isSuccessful()) {
@@ -144,14 +145,11 @@ public class RetrofitCall {
                         String bodyText=rv.string();
                         rawJson=bodyText.substring(bodyText.indexOf("{"),bodyText.lastIndexOf("}")+1);
 
-
-                    Log.v("response body", rawJson);
                     }catch (IOException e)
                     {
 
                     }
                     StockJson dataSet = new Gson().fromJson(rawJson, StockJson.class);
-                    Log.v("test", dataSet.meta.companyName+Integer.toString(dataSet.series.size()));
                     int size=dataSet.series.size();
 
                     if ( size> 0) {
@@ -175,6 +173,7 @@ public class RetrofitCall {
                         }
 
                         LineDataSet set1;
+                        TextView today=(TextView) mParentActivity.findViewById(R.id.todaysChange);
 
                         if (mChart.getData() != null &&
                                 mChart.getData().getDataSetCount() > 0) {
@@ -183,9 +182,16 @@ public class RetrofitCall {
                             mChart.getData().notifyDataChanged();
                             mChart.notifyDataSetChanged();
                         } else {
-                            set1 = new LineDataSet(values, "DataSet 1");
+                            set1 = new LineDataSet(values, "");
                             set1.enableDashedHighlightLine(10f, 5f, 0f);
-                            set1.setColor(Color.DKGRAY);
+                            if(percent.charAt(0)=='-'){
+                                set1.setColor(mParentActivity.getResources().getColor(R.color.graph_red));
+                                today.setTextColor(mParentActivity.getResources().getColor(R.color.graph_red));
+                            }else{
+                                set1.setColor(mParentActivity.getResources().getColor(R.color.graph_green));
+                                today.setTextColor(mParentActivity.getResources().getColor(R.color.graph_green));
+                            }
+
                             set1.setCircleColor(Color.BLACK);
                             set1.setLineWidth(3f);
                             set1.setDrawCircleHole(false);
@@ -203,7 +209,9 @@ public class RetrofitCall {
                             mChart.getXAxis().setEnabled(false);
                             mChart.setDoubleTapToZoomEnabled(false);
                             mChart.setPinchZoom(false);
-                            mChart.setDescription("");
+
+
+                            mChart.setDescription("5 Year History");
 
 
                             ArrayList<ILineDataSet> dataSets = new ArrayList<>();
@@ -222,6 +230,10 @@ public class RetrofitCall {
 
                         TextView tv=(TextView) mParentActivity.findViewById(R.id.stockPrice);
                         tv.setText("$"+Float.toString(price));
+                        today.setText(percent);
+                        TextView label=(TextView) mParentActivity.findViewById(R.id.todayLabel);
+                        label.setText(R.string.last_open);
+
 
                         ProgressBar spinner;
                         spinner = (ProgressBar)mParentActivity.findViewById(R.id.progressBar1);
@@ -244,7 +256,7 @@ public class RetrofitCall {
                     try {
                         Log.d("Test", "Error - Status : " + response.errorBody().string());
                     } catch (IOException e) {
-                        Log.e("Test", e.toString());
+                        Log.e("Error:", e.toString());
                     }
 
                 }
@@ -253,14 +265,14 @@ public class RetrofitCall {
 
             @Override
             public void onFailure(Call<okhttp3.ResponseBody> call, Throwable t) {
-                Log.d("Error----", t.getMessage());
+                Log.d("Error:", t.getMessage());
 
                 ProgressBar spinner;
                 spinner = (ProgressBar)mParentActivity.findViewById(R.id.progressBar1);
                 spinner.setVisibility(View.GONE);
 
                 Context context = mParentActivity;
-                CharSequence text = "Unable to Fetch data!";
+                CharSequence text = mParentActivity.getString(R.string.msg_data_fetch);
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);

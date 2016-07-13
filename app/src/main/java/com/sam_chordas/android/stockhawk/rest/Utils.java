@@ -51,7 +51,7 @@ public class Utils {
         }
       }
     } catch (JSONException e){
-      Log.e(LOG_TAG, "String to JSON failed: " + e);
+      Log.e(LOG_TAG, "Error: " + e);
     }
     return batchOperations;
   }
