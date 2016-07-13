@@ -21,4 +21,5 @@
     <string name="text_invalid_symbol">Invalid Symbol</string>
     <string name="last_open">Last Open</string>
     <string name="chart_desc">Chart showing five year history of the stock</string>
+    <string name="chart_title">5 Year History</string>
 </resources>

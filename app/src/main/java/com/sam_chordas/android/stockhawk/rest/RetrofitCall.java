@@ -211,7 +211,7 @@ public class RetrofitCall {
                             mChart.setPinchZoom(false);
 
 
-                            mChart.setDescription("5 Year History");
+                            mChart.setDescription(mParentActivity.getString(R.string.chart_title));
 
 
                             ArrayList<ILineDataSet> dataSets = new ArrayList<>();
