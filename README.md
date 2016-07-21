@@ -3,10 +3,14 @@ Added enhancements to the app in order to make it production ready. The work inc
 
 Tools and concepts used:-
 
-1) Retrofit with cleansing response JSON before parsing it with GSON.
-2) Yahoo Charts API to source historical data
-3) Widgets and PendingIntents
-4) MPAndroidChart API
+ - Retrofit with cleansing response JSON before parsing it with GSON. 
+ - Yahoo Charts API to source historical data
+ - Widgets and PendingIntents
+ - MPAndroidChart API
+
+
+----------
+
 
 ![enter image description here](https://s5.postimg.org/k9dh049br/stockhawk2.png)
 
