@@ -12,11 +12,11 @@ Tools and concepts used:-
 ----------
 
 
-![enter image description here](https://s5.postimg.org/k9dh049br/stockhawk2.png)
+![enter image description here](https://i.postimg.cc/pLNSHCjY/stockhawk1.png)
 
-![enter image description here](https://s5.postimg.org/dwybqa69j/stockhawk3.png)
+![enter image description here](https://i.postimg.cc/bwcqBQN4/stockhawk2.png)
 
-![enter image description here](https://s5.postimg.org/lzwi1lquv/stockhawk1.png)
+![enter image description here](https://i.postimg.cc/VkQbW0yk/stockhawk3.png)
 
 
 
